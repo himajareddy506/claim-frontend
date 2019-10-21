@@ -1,0 +1,188 @@
+<div class="card" *ngIf="err" class="alert alert-danger">
+    {{ err.message }}
+</div>
+<div class="card" *ngIf="response" class="alert alert-info">
+    {{ alertMsg }}
+</div>
+<!-- Claim Details -->
+<div class="card">
+
+    <div class="card-header">Claim Details</div>
+    <div class="card-body">
+        <form [formGroup]="claimForm" (ngSubmit)="onSubmit()">
+            <!-- Name Field -->
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" formControlName="firstName" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+                        <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                            <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" formControlName="lastName" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+                        <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                            <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Name Field -->
+            <div class="row">
+                <!-- Email Field -->
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="emailId">Email</label>
+                        <input type="text" formControlName="emailId" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.emailId.errors }" />
+                        <div *ngIf="submitted && f.emailId.errors" class="invalid-feedback">
+                            <div *ngIf="f.emailId.errors.required">Email is required</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Email Field -->
+
+                <!-- Policy Number Field -->
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="policyNumber">Policy Number</label>
+                        <input type="text" formControlName="policyNumber" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.policyNumber.errors }" />
+                        <div *ngIf="submitted && f.policyNumber.errors" class="invalid-feedback">
+                            <div *ngIf="f.policyNumber.errors.required">Policy Number is required</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Policy Number Field -->
+            </div>
+
+            <div class="row">
+
+                <!-- Admit Date Field -->
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="admitDate">Admitted Date</label>
+                        <input type="date" formControlName="admitDate" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.admitDate.errors }" />
+                        <div *ngIf="submitted && f.admitDate.errors" class="invalid-feedback">
+                            <div *ngIf="f.admitDate.errors.required">Admited Date is required</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Admit Date Field -->
+                <!-- Discharged Date Field -->
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="dischargeDate">Discharged Date</label>
+                        <input type="date" formControlName="dischargeDate" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.dischargeDate.errors }" />
+                        <div *ngIf="submitted && f.dischargeDate.errors" class="invalid-feedback">
+                            <div *ngIf="f.dischargeDate.errors.required">Discharged Date is required</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Discharged Date Field -->
+            </div>
+            <div class="row">
+
+                <!-- Hospital Field -->
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="hospitalName">Hospital Name</label>
+
+                        <select [(ngModel)]="selectedHospital" (ngModelChange)="onChange($event)"
+                            formControlName="hospitalName" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.hospitalName.errors }">
+                            <option *ngFor="let c2 of cities2" [ngValue]="c2.value"> {{c2.name}} </option>
+                        </select>
+                        <div *ngIf="submitted && f.hospitalName.errors" class="invalid-feedback">
+                            <div *ngIf="f.hospitalName.errors.required">Hospital Name is required</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Hospital Name Field -->
+                <!-- Diagnosis Field -->
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="diagnosis">Diagnosis</label>
+
+                        <select [(ngModel)]="selectedCity" (ngModelChange)="onChange($event)"
+                            formControlName="diagnosis" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.diagnosis.errors }">
+                            <option *ngFor="let c of cities" [ngValue]="c.value"> {{c.name}} </option>
+                        </select>
+                        <div *ngIf="submitted && f.diagnosis.errors" class="invalid-feedback">
+                            <div *ngIf="f.diagnosis.errors.required">Diagnosis is required</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Diagnosis Field -->
+            </div>
+            <div class="row">
+
+                <!-- Nature Of Ailment Field -->
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="natureOfAilment">Nature of Ailment</label>
+
+                        <select [(ngModel)]="selectedCity1" (ngModelChange)="onChange($event)"
+                            formControlName="natureOfAilment" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.natureOfAilment.errors }">
+                            <option *ngFor="let c1 of cities1" [ngValue]="c1"> {{c1.name}} </option>
+                        </select>
+                        <div *ngIf="submitted && f.natureOfAilment.errors" class="invalid-feedback">
+                            <div *ngIf="f.natureOfAilment.errors.required">Nature Of Ailment is required</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Nature Of Ailment Field -->
+                <!-- Total Amount Field -->
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="totalAmount">Total Amount</label>
+                        <input type="tel" formControlName="totalAmount" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.totalAmount.errors }" />
+                        <div *ngIf="submitted && f.totalAmount.errors" class="invalid-feedback">
+                            <div *ngIf="f.totalAmount.errors.required">Total Amount is required</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Total Amount Field -->
+            </div>
+            <!-- Details of Discharge Summary Field -->
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label for="detailsOfDischargeSummary">Details of Discharge Summary</label>
+                        <input type="text" formControlName="detailsOfDischargeSummary" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.detailsOfDischargeSummary.errors }" />
+                        <div *ngIf="submitted && f.detailsOfDischargeSummary.errors" class="invalid-feedback">
+                            <div *ngIf="f.detailsOfDischargeSummary.errors.required">Details of Discharge Summary is
+                                required</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Details of Discharge Summary Field -->
+
+
+            <div class="form-group">
+                <button [disabled]="loading" class="btn btn-primary">Claim</button>
+
+                <!-- <img *ngIf="loading"
+                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" /> -->
+                <a [routerLink]="['/login']" class="btn btn-link">Approver? Login.</a>
+                <!-- <button class="btn btn-secondary">Cancel</button> -->
+            </div>
+        </form>
+    </div>
+
+</div>
+<!-- Claim Details -->
