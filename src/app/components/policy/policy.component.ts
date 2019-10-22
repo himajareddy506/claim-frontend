@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { DataServiceService } from 'src/app/data-service.service';
 // import { AlertService, AuthenticationService } from '../_services';
 
 
@@ -24,6 +25,7 @@ export class PolicyComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
+    private dataService: DataServiceService,
     private route: Router,
     private http: HttpClient
   ) {
@@ -56,17 +58,24 @@ export class PolicyComponent implements OnInit {
     this.loading = true;
 
     console.log(this.policyForm);
-    var reqObj1 = {
+    var policy = {
       "policyId": this.policyForm.value.policyId
     };
-
+    // this.dataService.policyForm(policy).subscribe((response: any) => {
     this.http
-      .post(environment.baseUrl + '/claimProcessing/api/v1/policy/?policyId=' + this.policyForm.value.policyId, reqObj1)
-      .subscribe((res: Response) => {
-        console.log(res);
+      .post(environment.baseUrl + '/claimProcessing/api/v1/policy/?policyId=' + this.policyForm.value.policyId, policy)
+      .subscribe((response: Response) => {
+        console.log(response);
+        if (response.statusCode == 200) {
+          this.route.navigate(['/claim']);
+        }
+        else {
+          alert(response['message']);
+          this.route.navigate(['/policy']);
+        }
         // alert(res['message'])
         // sessionStorage.setItem("customerId", res['customerId']);
-        this.route.navigate(['/claim']);
+
 
       }, (err) => {
         this.err = true;

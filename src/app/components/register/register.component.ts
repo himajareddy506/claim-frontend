@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { SelectItem } from 'primeng/api';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { DataServiceService } from 'src/app/data-service.service';
 
 @Component({
   selector: 'app-register',
@@ -110,6 +111,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
+    private dataService: DataServiceService,
     private route: Router,
     private http: HttpClient
   ) {
@@ -120,9 +122,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.claimForm = this.formBuilder.group({
       // Validations for form fields
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      emailId: ['', Validators.required],
+
       policyId: ['', Validators.required],
       totalAmount: ['', Validators.required],
       natureOfAilment: ['', Validators.required],
@@ -169,13 +169,16 @@ export class RegisterComponent implements OnInit {
     /**
      * Post call to return response
      */
-    this.http.post(environment.baseUrl + '/claimProcessing/api/v1/claims/', reqObj).subscribe((response) => {
+    this.dataService.register(reqObj).subscribe((response: any) => {
+      // this.http.post(environment.baseUrl + '/claimProcessing/api/v1/claims/', reqObj).subscribe((response) => {
       if (response) {
         this.response = true;
         this.data = response;
+        console.log(this.data);
         this.alertMsg = '';
         this.alertMsg = this.data.message;
         alert(response['message']);
+
 
         this.policyId = this.data.policyId;
         this.natureOfAilment = this.data.natureOfAilment;
@@ -187,10 +190,14 @@ export class RegisterComponent implements OnInit {
         this.admitDate = this.data.admitDate;
         this.dob = this.data.dob;
         // Navigate to login page if form is submitted successfully
-        if (response['message'] == 'Claim Info Already Exist') {
-          this.route.navigate(['/policy']);
-        } else {
+        if (response.statusCode == 200) {
           this.details = false;
+          // this.route.navigate(['/policy']);
+        } else if (response.statusCode == 404) {
+          this.route.navigate(['/policy']);
+          // this.details = false;
+        } else {
+          this.route.navigate(['/policy']);
         }
         // this.route.navigate(['/login']);
 

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { DataServiceService } from 'src/app/data-service.service';
 /**
  * An interface for user intialization
  */
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
+        private dataService: DataServiceService,
         private route: Router,
         private http: HttpClient
     ) {
@@ -63,24 +65,25 @@ export class LoginComponent implements OnInit {
         this.loading = true;
 
         console.log(this.loginForm);
-        var reqObj1 = {
+        var login = {
             "emailId": this.loginForm.value.emailId,
             "passCode": this.loginForm.value.passCode
         };
+        this.dataService.logFrom(login).subscribe((response: any) => {
+            // this.http
+            //     .post(environment.baseUrl + '/claimProcessing/api/v1/user/', this.loginForm.value)
+            //     .subscribe((res: Response) => {
+            console.log(response);
+            // alert(res['message'])
+            sessionStorage.setItem("userId", response['userId']);
+            sessionStorage.setItem("roleId", response['roleId']);
+            this.route.navigate(['/dashboard']);
 
-        this.http
-            .post(environment.baseUrl + '/claimProcessing/api/v1/user/', this.loginForm.value)
-            .subscribe((res: Response) => {
-                console.log(res);
-                // alert(res['message'])
-                sessionStorage.setItem("userId", res['userId']);
-                this.route.navigate(['/dashboard']);
-
-            }, (err) => {
-                this.err = true;
-                console.log("rerror", err)
-                alert(err.message);
-            });
+        }, (err) => {
+            this.err = true;
+            console.log("rerror", err)
+            alert(err.message);
+        });
 
     }
 }

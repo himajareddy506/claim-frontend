@@ -12,43 +12,8 @@
     <div class="card-header">Claim Details</div>
     <div class="card-body">
         <form [formGroup]="claimForm" (ngSubmit)="onSubmit()">
-            <!-- Name Field -->
+
             <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input type="text" formControlName="firstName" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
-                        <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                            <div *ngIf="f.firstName.errors.required">First Name is required</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" formControlName="lastName" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
-                        <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                            <div *ngIf="f.lastName.errors.required">Last Name is required</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Name Field -->
-            <div class="row">
-                <!-- Email Field -->
-                <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label for="emailId">Email</label>
-                        <input type="email" formControlName="emailId" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && f.emailId.errors }" />
-                        <div *ngIf="submitted && f.emailId.errors" class="invalid-feedback">
-                            <div *ngIf="f.emailId.errors.required">Email is required</div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Email Field -->
 
                 <!-- Policy Number Field -->
                 <div class="col-md-6 col-sm-12">
@@ -175,10 +140,8 @@
             <!-- Details of Discharge Summary Field -->
 
 
-            <div class="form-group">
-                <button [disabled]="loading" class="btn btn-primary">Claim</button>
-
-                <a [routerLink]="['/login']" class="btn btn-link">Approver? Login.</a>
+            <div class="form-group" style="text-align: center;">
+                <button [disabled]=" loading" class="btn btn-primary">Submit Claim</button>
             </div>
         </form>
     </div>
@@ -191,12 +154,12 @@
     <div class="" style="margin: 2em;">
 
         <p-panel header="Claim Submission Details">
-            <p-card>
-                {{this.data.firstName}} {{this.data.lastName}}<br />
-                {{this.data.emailId}}<br />
-                {{this.data.policyNumber}}<br />
-                {{this.data.claimId}}<br />
-                <button [routerLink]="['/login']" class="btn btn-primary">Exit</button>
+            <p-card style="text-align: center;">
+                Name: {{this.data.firstName}} {{this.data.lastName}}<br />
+                Email Id: {{this.data.emailId}}<br />
+                Policy Number: {{this.data.policyNumber}}<br />
+                Claim Id: {{this.data.claimId}}<br />
+                <button [routerLink]="['/policy']" class="btn btn-primary">Ok</button>
             </p-card>
         </p-panel>
     </div>

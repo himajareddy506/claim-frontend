@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, Route } from '@angular/router';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DataServiceService } from 'src/app/data-service.service';
 
 interface Data2 {
   accountNumber: number;
@@ -17,29 +19,37 @@ interface Data2 {
 })
 export class AccsummaryComponent implements OnInit {
   claimId: any;
-  userId: number;
+  userId: any;
+  roleId: any;
   claim_id: number;
   data: any[];
+  reqObj1: object;
   display: boolean = false;
   settings: object = {
     columns: {
-      claimNumber: {
+      claimId: {
         title: 'Claim #'
       },
-      claimType: {
-        title: 'Claim Type'
+      juniorApproverClaimStatus: {
+        title: 'Status'
       },
-      policyNumber: {
+      policyId: {
         title: 'Policy #'
       },
-      claimedAmount: {
+      admitDate: {
+        title: 'Admitted Date'
+      },
+      dischargeDate: {
+        title: 'Discharged Date'
+      },
+      claimAmount: {
         title: 'Claimed Amount'
       },
-      totalLimit: {
+      eligiblityAmount: {
         title: 'Total Limit'
       },
-      Reason: {
-        title: 'Reason'
+      detailsOfDischargeSummary: {
+        title: 'Description'
       }
     },
     actions: {
@@ -49,36 +59,46 @@ export class AccsummaryComponent implements OnInit {
       position: 'right',
       custom: [
         {
-          name: "Approve",
-          title: "Approve"
-        },
-        {
-          name: "Reject",
-          title: "Reject"
+          name: "Reason to Approve/Reject",
+          title: "Reason to Approve/Reject &nbsp;"
         }
       ]
     }
   };
+  reasonForm: FormGroup;
+  submitted = false;
+  loading = false;
+  claimStatus: any;
+  // formBuilder: any;
 
-  constructor(private router: Router,
+  constructor(private formBuilder: FormBuilder,
+    private router: Router,
     private route: Router,
-    private http: HttpClient) { }
+    private dataService: DataServiceService,
+    private http: HttpClient) {
+    this.claimStatus = [
+      { name: 'Rejected', code: 'Rejected' },
+      { name: 'Approved', code: 'Approved' }
+    ];
+  }
 
   ngOnInit() {
 
     this.userId = parseInt(sessionStorage.getItem("userId"));
-    // this.http.get(environment.baseUrl + `/mortgage/api/customers/${this.customerId}`).subscribe((response) => {
-    //   if (response) {
-    //     this.data = response;
-    //     return this.data;
-    //     // console.log(response)
-    //   }
+    this.roleId = parseInt(sessionStorage.getItem("roleId"));
+    // this.quantityForm = this.formBuilder.group({
+    //   quantity: ['', Validators.required]
     // });
+    this.reasonForm = this.formBuilder.group({
+      reason: ['', Validators.required],
+      claimStatus: ['', Validators.required]
+    });
+
   }
 
   paginate = (event) => {
     console.log(event);
-    this.http.get(environment.baseUrl + '/claimProcessing/api/v1/?pageNumber=' + event.page + '&userId=' + this.userId).subscribe((response: any) => {
+    this.dataService.getNews(event.page, this.roleId).subscribe((response: any) => {
       if (response) {
         this.data = response;
         console.log(response);
@@ -89,6 +109,7 @@ export class AccsummaryComponent implements OnInit {
         console.log(response);
       }
     });
+
   }
 
   rowClicked = (event: Event) => {
@@ -107,14 +128,56 @@ export class AccsummaryComponent implements OnInit {
       this.showDialog();
     }
   }
-  approve() {
+  approve = () => {
 
   }
-  reject() {
+  reject = () => {
 
   }
-  showDialog() {
+  showDialog = () => {
     this.display = true;
 
+  }
+  cancel = () => {
+    // this.cancelEvent.emit();
+    this.display = false;
+    this.route.navigate(['/dashboard']);
+  }
+
+  //Form to change approve/Reject Status
+
+  get f() { return this.reasonForm.controls; }
+
+  confirm() {
+    // this.display = false;
+    // this.confirmEvent.emit();
+    console.log("in submit")
+    this.submitted = true;
+
+    // stop here if form is invalid
+    if (this.reasonForm.invalid) {
+      return;
+    }
+
+    this.loading = true;
+
+    console.log(this.reasonForm.value.reason.name);
+    this.reqObj1 = {
+      "reason": this.reasonForm.value.reason.name.reason,
+      "roleId": Number(sessionStorage.getItem("roleId")),
+      "claimId": Number(sessionStorage.getItem("claimId")),
+      "claimStatus": this.reasonForm.value.reason.name.claimStatus
+    };
+    this.dataService.respForm(this.reqObj1).subscribe((res: any) => {
+      // this.http.post(environment.baseUrl + 'claimProcessing/api/v1/', this.reqObj1)
+      // .subscribe((res: Response) => {
+      console.log(res);
+      this.route.navigate(['/dashboard']);
+
+    }, (err) => {
+      console.log(err)
+      alert(err.message);
+    });
+    // this.route.navigate(['/Dashboard']);
   }
 }
