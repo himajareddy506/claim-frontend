@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // baseUrl: 'http://192.168.43.180:8082'
-  baseUrl: 'http://10.117.189.192:8082'
+  baseUrl: 'http://10.117.189.134:8082'
 };
 
 /*

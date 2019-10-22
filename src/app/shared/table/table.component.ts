@@ -5,18 +5,27 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent{
-
+/**
+ * Table Reusable Component
+ */
+export class TableComponent {
+  /**
+   * settings 
+   *  
+   */
   @Input('settings')
-	settings : Array<Object> = [];
-  @Input('data')
-  data:  Array<Object> = [];
+  settings: Array<Object> = [];
+  @Input() data: Array<Object> = [];
   @Output() rowData = new EventEmitter();
-  @Input() stockId: number;
+  @Input() claimId: number;
 
-  rowClicked=(event)=> {
-    console.log(event)
+  /**
+   * Row Click function to emit an event
+   * @param {Event} event - Event to emit rowData
+   */
+  rowClicked = (event: Event) => {
     this.rowData.emit(event);
+
   }
 
 }

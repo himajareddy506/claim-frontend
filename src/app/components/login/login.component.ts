@@ -4,12 +4,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-// import { AlertService, AuthenticationService } from '../_services';
-
+/**
+ * An interface for user intialization
+ */
 export class User {
-  constructor(public emailId: string,
-    public password: string) {
-  }
+    constructor(public emailId: string,
+        public password: string) {
+    }
 }
 
 @Component({ templateUrl: 'login.component.html' })
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit {
     data1: any;
     loginId: any;
     password: any;
-    err=false;
+    err = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -30,17 +31,16 @@ export class LoginComponent implements OnInit {
         private route: Router,
         private http: HttpClient
     ) {
-       
+
     }
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
             emailId: ['', [
-              Validators.required,
-              Validators.pattern("[^ @]*@[^ @]*")]],
-            password: ['', [
-              Validators.required,
-              Validators.minLength(8)]],
+                Validators.required,
+                Validators.pattern("[^ @]*@[^ @]*")]],
+            passCode: ['', [
+                Validators.required,]],
         });
 
     }
@@ -65,20 +65,20 @@ export class LoginComponent implements OnInit {
         console.log(this.loginForm);
         var reqObj1 = {
             "emailId": this.loginForm.value.emailId,
-            "password": this.loginForm.value.password
+            "passCode": this.loginForm.value.passCode
         };
 
         this.http
-            .post(environment.baseUrl + '/mortgage/api/login', this.loginForm.value)
+            .post(environment.baseUrl + '/claimProcessing/api/v1/user/', this.loginForm.value)
             .subscribe((res: Response) => {
                 console.log(res);
                 // alert(res['message'])
-                sessionStorage.setItem("customerId", res['customerId']);
+                sessionStorage.setItem("userId", res['userId']);
                 this.route.navigate(['/dashboard']);
 
             }, (err) => {
-                this.err=true;
-                console.log("rerror",err)
+                this.err = true;
+                console.log("rerror", err)
                 alert(err.message);
             });
 

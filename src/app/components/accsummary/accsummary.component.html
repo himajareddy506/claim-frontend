@@ -1,16 +1,15 @@
 <!-- Summary Page -->
 <div class="card">
-    <!-- <div class="card-header">
-        <div class="row">
-            <div class="col-md-12 col-sm-12">
-                <h6>List of Claims</h6>
-            </div>
-
-        </div>
-    </div> -->
     <div class="card-body">
-        <app-table [settings]="settings" [data]="data" [stockId]="stock_id" (rowData)='rowClicked($event)'></app-table>
-
+        <app-table [settings]="settings" [data]="data" [claimId]="claim_id" (rowData)='rowClicked($event)'></app-table>
+        <p-paginator [rows]="10" totalRecords="100" (onPageChange)="paginate($event)"></p-paginator>
     </div>
 </div>
+<div *ngFor="let i of data">
+    {{i.claimId}}
+</div>
 <!-- Summary Page -->
+
+<p-dialog header="Title" [(visible)]="display">
+    Content
+</p-dialog>

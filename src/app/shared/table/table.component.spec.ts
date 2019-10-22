@@ -1,40 +1,42 @@
-// import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { TableComponent } from './table.component';
+import { TableComponent } from './table.component';
 
-// describe('TableComponent', () => {
-//   let component: TableComponent;
-//   let fixture: ComponentFixture<TableComponent>;
+describe('TableComponent', () => {
+    let component: TableComponent;
+    let fixture: ComponentFixture<TableComponent>;
 
-//   beforeEach(async(() => {
-//     TestBed.configureTestingModule({
-//       declarations: [ TableComponent ]
-//     })
-//     .compileComponents();
-//   }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [TableComponent]
+        })
+            .compileComponents();
+    }));
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(TableComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(TableComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-//   it('should create', () => {
-//     expect(component).toBeTruthy();
-//   });
+    it('should create new form', () => {
+        // @ts-ignore
+        const comp = new TableComponent();
+        expect(comp).toBeTruthy();
+    });
 
-//   describe("when file is selected and triggered change event", () => {
-//     beforeEach(() => {
+    describe("when file is selected and triggered change event", () => {
+        beforeEach(() => {
 
-//         fixture = TestBed.createComponent(TableComponent);
-//         component = fixture.componentInstance;
-//         fixture.detectChanges();
+            fixture = TestBed.createComponent(TableComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
 
-//     });
+        });
 
-//     it('should call "rowClicked()"', () => {
-//         console.log(component)
-//         expect(component.rowClicked).toHaveBeenCalled();
-//     });
-// })
-// });
+        it('should call "rowClicked()"', () => {
+            console.log(component)
+            expect(component.rowClicked).toHaveBeenCalled();
+        });
+    })
+});

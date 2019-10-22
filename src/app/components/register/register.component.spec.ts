@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterComponent } from './register.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-describe('Component: Login', () => {
+describe('Component: Register', () => {
 
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
@@ -24,7 +24,7 @@ describe('Component: Login', () => {
     component.ngOnInit();
   });
 
-  it('registerForm invalid when empty', () => {
+  it('claimForm invalid when empty', () => {
     expect(component.claimForm.valid).toBeFalsy();
   });
 
@@ -50,11 +50,20 @@ describe('Component: Login', () => {
     expect(errors['pattern']).toBeFalsy();
   });
 
-  it('submitting a registerForm return message', () => {
+  it('submitting a claimForm return message', () => {
     expect(component.claimForm.invalid).toBeFalsy();
+    component.claimForm.controls['firstName'].setValue("test");
+    component.claimForm.controls['lastName'].setValue("test");
     component.claimForm.controls['emailId'].setValue("test@test.com");
-    component.claimForm.controls['mobileNumber'].setValue("9876543210");
-    component.claimForm.controls['customerName'].setValue("test");
+    component.claimForm.controls['policyNumber'].setValue("SR1234");
+    component.claimForm.controls['natureOfAilment'].setValue("test");
+    component.claimForm.controls['diagnosis'].setValue("test");
+    component.claimForm.controls['hospitalName'].setValue("test");
+    component.claimForm.controls['detailsOfDischargeSummary'].setValue("Sample text");
+    component.claimForm.controls['totalAmount'].setValue("12345");
+    component.claimForm.controls['mobileNumber'].setValue("9876543321");
+    component.claimForm.controls['dischargeDate'].setValue("1994/06/10");
+    component.claimForm.controls['admitDate'].setValue("1994/06/10");
     component.claimForm.controls['dob'].setValue("1993/06/13");
     expect(component.claimForm.valid).toBeTruthy();
 

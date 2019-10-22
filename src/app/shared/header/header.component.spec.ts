@@ -8,9 +8,9 @@ describe('HeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeaderComponent ]
+      declarations: [HeaderComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -23,10 +23,10 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display the div tag text "ING-Mortgage"', async(() => {
+  it('should display the h5 tag text "Claim Reimbursement"', async(() => {
     const fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('span').textContent).toContain('ING-Mortgage');
+    expect(compiled.querySelector('h5').textContent).toContain('Claim Reimbursement');
   }));
 });

@@ -12,11 +12,11 @@ box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important
     <div class="card-body">
         <form [formGroup]="policyForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
-                <label for="policyNumber">Policy Number</label>
-                <input type="tel" formControlName="policyNumber" class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && f.policyNumber.errors }" />
-                <div *ngIf="submitted && f.policyNumber.errors" class="invalid-feedback">
-                    <div *ngIf="f.policyNumber.errors.required">Policy Number is required</div>
+                <label for="policyId">Policy Number</label>
+                <input type="tel" formControlName="policyId" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.policyId.errors }" />
+                <div *ngIf="submitted && f.policyId.errors" class="invalid-feedback">
+                    <div *ngIf="f.policyId.errors.required">Policy Number is required</div>
                 </div>
             </div>
 

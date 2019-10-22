@@ -27,7 +27,7 @@ import { AccsummaryComponent } from './components/accsummary/accsummary.componen
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LoginnComponent } from './components/loginn/loginn.component';
 import { PolicyComponent } from './components/policy/policy.component';
-
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [
@@ -49,6 +49,7 @@ import { PolicyComponent } from './components/policy/policy.component';
     ButtonModule,
     DropdownModule,
     PanelModule,
+    PaginatorModule,
     CardModule,
     TabViewModule,
     InputTextModule,

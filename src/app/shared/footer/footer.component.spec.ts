@@ -8,9 +8,9 @@ describe('FooterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FooterComponent ]
+      declarations: [FooterComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -27,6 +27,6 @@ describe('FooterComponent', () => {
     const fixture = TestBed.createComponent(FooterComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('footer').textContent).toContain('Copyrights &#9400;2019.&nbsp; ING-Mortgage');
+    expect(compiled.querySelector('footer').textContent).toContain('Copyrights Ⓒ2019.  Claim Reimbursement');
   });
 });

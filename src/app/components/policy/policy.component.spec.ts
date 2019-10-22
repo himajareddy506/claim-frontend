@@ -8,9 +8,9 @@ describe('PolicyComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PolicyComponent ]
+      declarations: [PolicyComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +19,11 @@ describe('PolicyComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+
+  it('should create new object', () => {
+    // @ts-ignore
+    const comp = new PolicyComponent();
+    comp.ngOnInit();
+    expect(comp).toBeTruthy();
   });
 });

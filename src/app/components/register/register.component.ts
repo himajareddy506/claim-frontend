@@ -11,33 +11,100 @@ import { environment } from 'src/environments/environment';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
+/**
+ * The Register component
+ */
 export class RegisterComponent implements OnInit {
+  details: boolean = true;
+
+  /**
+     * Formgrup intialize
+     */
   claimForm: FormGroup;
+  /**
+     * loading status
+     */
   loading = false;
+  /**
+     * submitted status
+     */
   submitted = false;
+  /**
+     * response data object
+     */
   data: any;
+  /**
+     * firstName intialize
+     */
   firstName: string;
+  /**
+     * lastName intialize
+     */
   lastName: string;
+
   emailId: string;
   natureOfAilment: string;
   diagnosis: string;
   detailsOfDischargeSummary: string;
   hospitalName: string;
   totalAmount: number;
-  policyNumber: number;
+  policyId: number;
+  /**
+     * The current time
+     * @type {Date}
+     */
   dischargeDate: Date;
+  /**
+     * The current time
+     * @type {Date}
+     */
   admitDate: Date;
+  /**
+     * The current time
+     * @type {Date}
+     */
   dob: Date;
   date: string;
   apibaseUrl: any;
   err = false;
   response = false;
   alertMsg: string = '';
-  cities = [{ 'name': 'Respiratory', 'value': 1 }, { 'name': 'Cardiac', 'value': 2 }, { 'name': 'Orthopedic', 'value': 3 }];
+  cities = [{ 'name': 'Respiratory', 'value': 'Respiratory' }, { 'name': 'Cardiac', 'value': 'Cardiac' }, { 'name': 'Orthopedic', 'value': 'Orthopedic' }];
 
   cities1: object;
-  cities2 = [{ 'name': 'NRI' }, { 'name': 'Aswini Hospitals' }, { 'name': 'Yamini Hospitals' }]
+  cities2 = [{ 'name': 'Apollo Hospitals', 'value': 'Apollo Hospitals' }, { 'name': 'Cloud Nine Hospitals', 'value': 'Cloud Nine Hospitals' }, { 'name': 'Fortis Hospitals', 'value': 'Fortis Hospitals' }, { 'name': 'Best Hospital', 'value': 'Best Hospital' }]
+  settings: object = {
+    columns: {
+      firstName: {
+        title: 'First Name'
+      },
+      lastName: {
+        title: 'Last Name'
+      },
+      emailId: {
+        title: 'Email Id'
+      },
+      claimId: {
+        title: 'Claim Id'
+      },
+      policyNumber: {
+        title: 'Policy Number'
+      },
 
+    },
+    actions: {
+      add: false,
+      edit: false,
+      delete: false,
+      position: 'right',
+      custom: [
+        {
+          name: "Approve",
+          title: "Reject"
+        }
+      ]
+    }
+  };
 
 
   constructor(
@@ -45,24 +112,25 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private route: Router,
     private http: HttpClient
-  ) { }
+  ) {
+    this.cities1 = [];
+
+  }
 
   ngOnInit() {
     this.claimForm = this.formBuilder.group({
       // Validations for form fields
-      firstName: ['', [Validators.required, Validators.maxLength(6)]],
-      lastName: ['', [Validators.required, Validators.maxLength(6)]],
-      emailId: ['', Validators.required, Validators.maxLength(6)],
-      policyNumber: ['', Validators.required, Validators.maxLength(6)],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      emailId: ['', Validators.required],
+      policyId: ['', Validators.required],
       totalAmount: ['', Validators.required],
       natureOfAilment: ['', Validators.required],
       diagnosis: ['', Validators.required],
       hospitalName: ['', Validators.required],
       dischargeDate: ['', Validators.required],
       admitDate: ['', Validators.required],
-      detailsOfDischargeSummary: ['', Validators.required, Validators.maxLength(1000)],
-      mobileNumber: ['', [Validators.required, Validators.minLength(10)]],
-      dob: ['', [Validators.required]]
+      detailsOfDischargeSummary: ['', Validators.required]
     });
   }
 
@@ -72,8 +140,10 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     // Replace all - with / in date field
-    this.date = this.replaceAll(this.claimForm.value.dob, '-', '/');
-    // console.log(this.date);
+    this.admitDate = this.replaceAll(this.claimForm.value.admitDate, '-', '/');
+    this.dischargeDate = this.replaceAll(this.claimForm.value.dischargeDate, '-', '/');
+    console.log(this.admitDate, this.dischargeDate);
+
     // this.date = new Date().toDateString();
 
     // stop here if form is invalid
@@ -81,32 +151,33 @@ export class RegisterComponent implements OnInit {
       return;
     }
     // console.log(this.registerForm);
+    /**
+     * request Object to pass data to post call
+     */
     var reqObj = {
-      "fisrtName": this.claimForm.value.firstName,
-      "lastName": this.claimForm.value.lastName,
-      "emailId": this.claimForm.value.emailId,
-      "policyNumber": this.claimForm.value.policyNumber,
-      "natureOfAilment": this.claimForm.value.natureOfAilment,
+
+      "policyId": this.claimForm.value.policyId,
+      "natureOfAilment": this.claimForm.value.natureOfAilment.name,
       "diagnosis": this.claimForm.value.diagnosis,
       "hospitalName": this.claimForm.value.hospitalName,
       "detailsOfDischargeSummary": this.claimForm.value.detailsOfDischargeSummary,
       "totalAmount": this.claimForm.value.totalAmount,
       "mobileNumber": this.claimForm.value.mobileNumber,
-      "dischargeDate": this.date,
-      "admitDate": this.date,
-      "dob": this.date
+      "dischargeDate": this.admitDate,
+      "admitDate": this.dischargeDate
     };
-    this.http.post(environment.baseUrl + '/mortgage/api/register', reqObj).subscribe((response) => {
+    /**
+     * Post call to return response
+     */
+    this.http.post(environment.baseUrl + '/claimProcessing/api/v1/claims/', reqObj).subscribe((response) => {
       if (response) {
         this.response = true;
         this.data = response;
         this.alertMsg = '';
         this.alertMsg = this.data.message;
         alert(response['message']);
-        this.firstName = this.data.firstName;
-        this.lastName = this.data.lastName;
-        this.emailId = this.data.emailId;
-        this.policyNumber = this.data.policyNumber;
+
+        this.policyId = this.data.policyId;
         this.natureOfAilment = this.data.natureOfAilment;
         this.diagnosis = this.data.diagnosis;
         this.hospitalName = this.data.hospitalName;
@@ -116,7 +187,14 @@ export class RegisterComponent implements OnInit {
         this.admitDate = this.data.admitDate;
         this.dob = this.data.dob;
         // Navigate to login page if form is submitted successfully
-        this.route.navigate(['/login']);
+        if (response['message'] == 'Claim Info Already Exist') {
+          this.route.navigate(['/policy']);
+        } else {
+          this.details = false;
+        }
+        // this.route.navigate(['/login']);
+
+
       }
 
       // console.log(this.registerForm);
@@ -137,19 +215,22 @@ export class RegisterComponent implements OnInit {
 
   // Dropdown for diagnosis and aliment
   onChange = (city) => {
-    this.cities1 = [];
     console.log(city);
 
-    if (city == 1) {
-      this.cities1 = [{ 'name': 'Cold' }, { 'name': 'Cough' }, { 'name': 'Headache' }];
-    } else if (city == 2) {
-      this.cities1 = [{ 'name': 'Heart valve Disease' }, { 'name': 'Heart Muscle Disease' }, { 'name': 'Others' }];
+    switch (city) {
+      case 'Respiratory': //code block statement1;
+        {
+          this.cities1 = [{ 'name': 'Cold' }, { 'name': 'Cough' }, { 'name': 'Headache' }];
+          break;
+        }
+      case 'Cardiac': //code block statement2;
+        this.cities1 = [{ 'name': 'Heart valve Disease' }, { 'name': 'Heart Muscle Disease' }, { 'name': 'Others' }];
+        break;
+      case 'Orthopedic': //code block statement3;
+        this.cities1 = [{ 'name': 'CTS' }, { 'name': 'Ligamentear' }, { 'name': 'Others' }];
+        break;
 
     }
-    else {
-      this.cities1 = [{ 'name': 'CTS' }, { 'name': 'Ligamentear' }, { 'name': 'Others' }];
-    }
-
 
   }
 

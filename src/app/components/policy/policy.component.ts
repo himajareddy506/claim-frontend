@@ -32,7 +32,7 @@ export class PolicyComponent implements OnInit {
 
   ngOnInit() {
     this.policyForm = this.formBuilder.group({
-      policyNumber: ['', [
+      policyId: ['', [
         Validators.required]]
     });
 
@@ -57,11 +57,11 @@ export class PolicyComponent implements OnInit {
 
     console.log(this.policyForm);
     var reqObj1 = {
-      "policyNumber": this.policyForm.value.policyNumber
+      "policyId": this.policyForm.value.policyId
     };
 
     this.http
-      .post(environment.baseUrl + '/mortgage/api/login', reqObj1)
+      .post(environment.baseUrl + '/claimProcessing/api/v1/policy/?policyId=' + this.policyForm.value.policyId, reqObj1)
       .subscribe((res: Response) => {
         console.log(res);
         // alert(res['message'])

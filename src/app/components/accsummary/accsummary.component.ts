@@ -16,9 +16,11 @@ interface Data2 {
   styleUrls: ['./accsummary.component.css']
 })
 export class AccsummaryComponent implements OnInit {
-  customerId: any;
-  data2: any = '';
-
+  claimId: any;
+  userId: number;
+  claim_id: number;
+  data: any[];
+  display: boolean = false;
   settings: object = {
     columns: {
       claimNumber: {
@@ -42,12 +44,16 @@ export class AccsummaryComponent implements OnInit {
     },
     actions: {
       add: false,
-      edit: true,
-      delete: true,
+      edit: false,
+      delete: false,
       position: 'right',
       custom: [
         {
           name: "Approve",
+          title: "Approve"
+        },
+        {
+          name: "Reject",
           title: "Reject"
         }
       ]
@@ -60,14 +66,55 @@ export class AccsummaryComponent implements OnInit {
 
   ngOnInit() {
 
-    this.customerId = sessionStorage.getItem("customerId");
-    this.http.get(environment.baseUrl + `/mortgage/api/customers/${this.customerId}`).subscribe((response) => {
+    this.userId = parseInt(sessionStorage.getItem("userId"));
+    // this.http.get(environment.baseUrl + `/mortgage/api/customers/${this.customerId}`).subscribe((response) => {
+    //   if (response) {
+    //     this.data = response;
+    //     return this.data;
+    //     // console.log(response)
+    //   }
+    // });
+  }
+
+  paginate = (event) => {
+    console.log(event);
+    this.http.get(environment.baseUrl + '/claimProcessing/api/v1/?pageNumber=' + event.page + '&userId=' + this.userId).subscribe((response: any) => {
       if (response) {
-        this.data2 = response;
-        return this.data2;
+        this.data = response;
+        console.log(response);
+        // return this.data;
         // console.log(response)
+        this.data = response;
+        localStorage.setItem("claimId", response['claimId']);
+        console.log(response);
       }
     });
   }
 
+  rowClicked = (event: Event) => {
+    this.claimId = localStorage.getItem("claimId");
+    this.claim_id = Number(localStorage.getItem("claimId"));
+    console.log(event)
+    this.display = true;
+    // this.selectedStock = event.data.stockName;
+    console.log(event, 'cdscd');
+    const d = confirm();
+    if (d == true) {
+      this.approve();
+      this.showDialog();
+    } else {
+      alert('false');
+      this.showDialog();
+    }
+  }
+  approve() {
+
+  }
+  reject() {
+
+  }
+  showDialog() {
+    this.display = true;
+
+  }
 }
